@@ -13,6 +13,8 @@ const initialState = {
   isLoading: false,
   status: "Loading",
   index: 0,
+  answer: null,
+  points: 0,
 };
 const reducer = (currentState, action) => {
   if (action.type === "DataReceived") {
@@ -24,13 +26,14 @@ const reducer = (currentState, action) => {
   if (action.type === "start") {
     return { ...currentState, status: "active" };
   }
+  if (action.type === "newAnswer") {
+    return { ...currentState, answer: action.payload };
+  }
 };
 
 function App() {
-  const [{ questions, isLoading, status, index }, dispatch] = useReducer(
-    reducer,
-    initialState
-  );
+  const [{ questions, isLoading, status, index, answer }, dispatch] =
+    useReducer(reducer, initialState);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -66,7 +69,13 @@ function App() {
           dispatch={dispatch}
         />
       )}
-      {status === "active" && <Question allQuestion={questions[index]} />}
+      {status === "active" && (
+        <Question
+          allQuestion={questions[index]}
+          dispatch={dispatch}
+          answer={answer}
+        />
+      )}
     </div>
   );
 }
