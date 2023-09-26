@@ -9,6 +9,8 @@ import { StartSceen } from "./Components/StartSceen";
 import { Question } from "./Components/Question";
 import { NextButton } from "./Components/NextButton";
 import { Timer } from "./Components/Timer";
+import { Progress } from "./Components/Progress";
+import { FinishedScreen } from "./Components/FinishedScreen";
 
 const initialState = {
   questions: [],
@@ -44,11 +46,14 @@ const reducer = (currentState, action) => {
     return {
       ...currentState,
       index:
-        currentState.index < currentState.questions.length - 1
+        currentState.index < currentState.questions.length
           ? currentState.index + 1
-          : 0,
+          : currentState.index,
       answer: null,
     };
+  }
+  if (action.type === "done") {
+    return { ...currentState, status: "finished" };
   }
 };
 
@@ -79,7 +84,9 @@ function App() {
     return questions.length;
   };
 
-  const today = new Date();
+  const maxTotalPoint = questions.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.points;
+  }, 0);
 
   return (
     <div className="app">
@@ -93,8 +100,20 @@ function App() {
             dispatch={dispatch}
           />
         )}
+        {status === "finished" && (
+          <FinishedScreen points={points} maxPoints={maxTotalPoint} />
+        )}
         {status === "active" && (
           <>
+            <Progress
+              index={index + 1}
+              numberQuestions={totalQuestion(questions)}
+              currentPoint={points}
+              maxpossiblePoints={maxTotalPoint}
+              answer={answer}
+              dispatch={dispatch}
+            />
+
             <Question
               allQuestion={questions[index]}
               dispatch={dispatch}
@@ -102,9 +121,12 @@ function App() {
               myPoints={points}
             />
             <Timer />
-            {answer !== null && (
-              <NextButton dispatch={dispatch} answer={answer} />
-            )}
+
+            <NextButton
+              dispatch={dispatch}
+              index={index}
+              numberofQuestions={totalQuestion(questions)}
+            />
           </>
         )}
       </Main>
