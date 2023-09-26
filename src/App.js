@@ -7,6 +7,8 @@ import { Loader } from "./Components/Loader";
 import Error from "./Components/Error";
 import { StartSceen } from "./Components/StartSceen";
 import { Question } from "./Components/Question";
+import { NextButton } from "./Components/NextButton";
+import { Timer } from "./Components/Timer";
 
 const initialState = {
   questions: [],
@@ -27,12 +29,31 @@ const reducer = (currentState, action) => {
     return { ...currentState, status: "active" };
   }
   if (action.type === "newAnswer") {
-    return { ...currentState, answer: action.payload };
+    const currentQuestion = currentState.questions.at(currentState.index);
+
+    return {
+      ...currentState,
+      answer: action.payload,
+      points:
+        currentQuestion.correctOption === action.payload
+          ? currentState.points + currentQuestion.points
+          : currentState.points,
+    };
+  }
+  if (action.type === "nextQuestion") {
+    return {
+      ...currentState,
+      index:
+        currentState.index < currentState.questions.length - 1
+          ? currentState.index + 1
+          : 0,
+      answer: null,
+    };
   }
 };
 
 function App() {
-  const [{ questions, isLoading, status, index, answer }, dispatch] =
+  const [{ questions, isLoading, status, index, answer, points }, dispatch] =
     useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -58,24 +79,35 @@ function App() {
     return questions.length;
   };
 
+  const today = new Date();
+
   return (
     <div className="app">
       <Header />
-      {status === "Loading" && <Loader />}
-      {status === "Error" && <Error />}
-      {status === "Ready" && (
-        <StartSceen
-          numbQuestions={totalQuestion(questions)}
-          dispatch={dispatch}
-        />
-      )}
-      {status === "active" && (
-        <Question
-          allQuestion={questions[index]}
-          dispatch={dispatch}
-          answer={answer}
-        />
-      )}
+      <Main>
+        {status === "Loading" && <Loader />}
+        {status === "Error" && <Error />}
+        {status === "Ready" && (
+          <StartSceen
+            numbQuestions={totalQuestion(questions)}
+            dispatch={dispatch}
+          />
+        )}
+        {status === "active" && (
+          <>
+            <Question
+              allQuestion={questions[index]}
+              dispatch={dispatch}
+              answer={answer}
+              myPoints={points}
+            />
+            <Timer />
+            {answer !== null && (
+              <NextButton dispatch={dispatch} answer={answer} />
+            )}
+          </>
+        )}
+      </Main>
     </div>
   );
 }

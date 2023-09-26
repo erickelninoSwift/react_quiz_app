@@ -1,10 +1,10 @@
 import React from "react";
 import { Options } from "./Options";
-export const Question = ({ allQuestion, dispatch, answer }) => {
+export const Question = ({ allQuestion, dispatch, answer, myPoints }) => {
   const { question, points, options, correctOption } = allQuestion;
 
-  console.log(allQuestion);
-  console.log(`My answer is : ${allQuestion.options[answer]}`);
+  console.log(`total points : ${myPoints}`);
+
   return (
     <div>
       <h4>{question}</h4>
