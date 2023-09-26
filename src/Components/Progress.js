@@ -8,7 +8,6 @@ export const Progress = ({
   answer,
   dispatch,
 }) => {
-  if (index === numberQuestions) return dispatch({ type: "done" });
   return (
     <header className="progress">
       <progress max={numberQuestions} value={index + Number(answer !== null)} />

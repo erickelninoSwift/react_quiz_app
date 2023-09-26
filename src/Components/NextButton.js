@@ -10,4 +10,11 @@ export const NextButton = ({ dispatch, index, numberofQuestions }) => {
         Next
       </button>
     );
+
+  if (index >= numberofQuestions - 1)
+    return (
+      <button className="btn btn-ui" onClick={() => dispatch({ type: "done" })}>
+        Done
+      </button>
+    );
 };

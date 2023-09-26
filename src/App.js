@@ -19,6 +19,7 @@ const initialState = {
   index: 0,
   answer: null,
   points: 0,
+  hightScore: 0,
 };
 const reducer = (currentState, action) => {
   if (action.type === "DataReceived") {
@@ -45,20 +46,24 @@ const reducer = (currentState, action) => {
   if (action.type === "nextQuestion") {
     return {
       ...currentState,
-      index:
-        currentState.index < currentState.questions.length
-          ? currentState.index + 1
-          : currentState.index,
+      index: currentState.index + 1,
       answer: null,
     };
   }
   if (action.type === "done") {
-    return { ...currentState, status: "finished" };
+    return {
+      ...currentState,
+      status: "finished",
+      hightScore: currentState.points,
+    };
+  }
+  if (action.type === "restart") {
+    return { ...currentState, answer: null, index: 0, points: 0 };
   }
 };
 
 function App() {
-  const [{ questions, isLoading, status, index, answer, points }, dispatch] =
+  const [{ questions, hightScore, status, index, answer, points }, dispatch] =
     useReducer(reducer, initialState);
 
   useEffect(() => {
@@ -101,7 +106,12 @@ function App() {
           />
         )}
         {status === "finished" && (
-          <FinishedScreen points={points} maxPoints={maxTotalPoint} />
+          <FinishedScreen
+            points={points}
+            maxPoints={maxTotalPoint}
+            dispatch={dispatch}
+            hightScore={hightScore}
+          />
         )}
         {status === "active" && (
           <>

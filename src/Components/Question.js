@@ -1,7 +1,7 @@
 import React from "react";
 import { Options } from "./Options";
 export const Question = ({ allQuestion, dispatch, answer, myPoints }) => {
-  const { question, points, options, correctOption } = allQuestion;
+  const { question, options, correctOption } = allQuestion;
 
   console.log(`total points : ${myPoints}`);
 
