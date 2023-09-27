@@ -58,7 +58,15 @@ const reducer = (currentState, action) => {
     };
   }
   if (action.type === "restart") {
-    return { ...currentState, answer: null, index: 0, points: 0 };
+    return {
+      ...currentState,
+      questions: currentState.questions,
+      answer: null,
+      index: 0,
+      points: 0,
+      status: "Ready",
+      hightScore: 0,
+    };
   }
 };
 
@@ -132,11 +140,13 @@ function App() {
             />
             <Timer />
 
-            <NextButton
-              dispatch={dispatch}
-              index={index}
-              numberofQuestions={totalQuestion(questions)}
-            />
+            {answer !== null && (
+              <NextButton
+                dispatch={dispatch}
+                index={index}
+                numberofQuestions={totalQuestion(questions)}
+              />
+            )}
           </>
         )}
       </Main>
