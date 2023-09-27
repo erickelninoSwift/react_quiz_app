@@ -21,7 +21,7 @@ const initialState = {
   answer: null,
   points: 0,
   hightScore: 0,
-  secondsRemaing: 10,
+  secondsRemaing: 20,
 };
 const reducer = (currentState, action) => {
   if (action.type === "DataReceived") {
@@ -68,13 +68,24 @@ const reducer = (currentState, action) => {
       points: 0,
       status: "Ready",
       hightScore: 0,
+      secondsRemaing: 20,
+    };
+  }
+  if (action.type === "tick") {
+    return {
+      ...currentState,
+      secondsRemaing: currentState.secondsRemaing - 1,
+      status:
+        currentState.secondsRemaing === 0 ? "finished" : currentState.status,
     };
   }
 };
 
 function App() {
-  const [{ questions, hightScore, status, index, answer, points }, dispatch] =
-    useReducer(reducer, initialState);
+  const [
+    { questions, secondsRemaing, hightScore, status, index, answer, points },
+    dispatch,
+  ] = useReducer(reducer, initialState);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -141,7 +152,7 @@ function App() {
               myPoints={points}
             />
             <Footer>
-              <Timer />
+              <Timer seconds={secondsRemaing} dispatch={dispatch} />
 
               {answer !== null && (
                 <NextButton
