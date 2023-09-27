@@ -11,6 +11,7 @@ import { NextButton } from "./Components/NextButton";
 import { Timer } from "./Components/Timer";
 import { Progress } from "./Components/Progress";
 import { FinishedScreen } from "./Components/FinishedScreen";
+import { Footer } from "./Components/Footer";
 
 const initialState = {
   questions: [],
@@ -20,6 +21,7 @@ const initialState = {
   answer: null,
   points: 0,
   hightScore: 0,
+  secondsRemaing: 10,
 };
 const reducer = (currentState, action) => {
   if (action.type === "DataReceived") {
@@ -138,15 +140,17 @@ function App() {
               answer={answer}
               myPoints={points}
             />
-            <Timer />
+            <Footer>
+              <Timer />
 
-            {answer !== null && (
-              <NextButton
-                dispatch={dispatch}
-                index={index}
-                numberofQuestions={totalQuestion(questions)}
-              />
-            )}
+              {answer !== null && (
+                <NextButton
+                  dispatch={dispatch}
+                  index={index}
+                  numberofQuestions={totalQuestion(questions)}
+                />
+              )}
+            </Footer>
           </>
         )}
       </Main>
