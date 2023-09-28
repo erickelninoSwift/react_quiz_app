@@ -13,6 +13,8 @@ import { Progress } from "./Components/Progress";
 import { FinishedScreen } from "./Components/FinishedScreen";
 import { Footer } from "./Components/Footer";
 
+const SECS_PRE_QUESTION = 20;
+
 const initialState = {
   questions: [],
   isLoading: false,
@@ -21,7 +23,7 @@ const initialState = {
   answer: null,
   points: 0,
   hightScore: 0,
-  secondsRemaing: 20,
+  secondsRemaing: null,
 };
 const reducer = (currentState, action) => {
   if (action.type === "DataReceived") {
@@ -31,7 +33,11 @@ const reducer = (currentState, action) => {
     return { ...currentState, status: "Error" };
   }
   if (action.type === "start") {
-    return { ...currentState, status: "active" };
+    return {
+      ...currentState,
+      status: "active",
+      secondsRemaing: currentState.questions.length * SECS_PRE_QUESTION,
+    };
   }
   if (action.type === "newAnswer") {
     const currentQuestion = currentState.questions.at(currentState.index);
@@ -68,7 +74,7 @@ const reducer = (currentState, action) => {
       points: 0,
       status: "Ready",
       hightScore: 0,
-      secondsRemaing: 20,
+      secondsRemaing: 10,
     };
   }
   if (action.type === "tick") {

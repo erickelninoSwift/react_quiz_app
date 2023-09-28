@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from "react";
 
 export const Timer = ({ seconds, dispatch }) => {
-  const [currentTime, setTime] = useState("");
-  const today = new Date();
-  let x = 0;
+  const mins = Math.floor(seconds / 60);
+  const sec = seconds % 60;
   useEffect(() => {
-    setInterval(function () {
+    const id = setInterval(function () {
       dispatch({ type: "tick" });
     }, 1000);
-    console.log(seconds);
-  }, []);
+    return () => {
+      return clearInterval(id);
+    };
+  }, [dispatch]);
 
   return (
     <button disabled className="btn timer">
-      {currentTime}
+      {mins < 10 && "0"}
+      {mins}:{sec < 10 && "0"}
+      {sec}
     </button>
   );
 };

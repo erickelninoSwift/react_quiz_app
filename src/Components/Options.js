@@ -2,7 +2,6 @@ import React from "react";
 import { v4 as uuidv4 } from "uuid";
 
 export const Options = ({ correct, options, currentDispach, answer }) => {
-  console.log("correct", correct);
   const hasAnswered = answer === null;
   return (
     <div className="options">

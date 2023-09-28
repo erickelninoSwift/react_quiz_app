@@ -3,8 +3,6 @@ import { Options } from "./Options";
 export const Question = ({ allQuestion, dispatch, answer, myPoints }) => {
   const { question, options, correctOption } = allQuestion;
 
-  console.log(`total points : ${myPoints}`);
-
   return (
     <div>
       <h4>{question}</h4>
