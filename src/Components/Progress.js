@@ -1,21 +1,23 @@
 import React from "react";
+import { useQuizContext } from "../Context/QuizContext";
 
-export const Progress = ({
-  index,
-  numberQuestions,
-  currentPoint,
-  maxpossiblePoints,
-  answer,
-  dispatch,
-}) => {
+export const Progress = () => {
+  const { questions, index, answer, points } = useQuizContext();
+
+  const maxTotalPoint = questions.reduce((accumulator, currentValue) => {
+    return accumulator + currentValue.points;
+  }, 0);
   return (
     <header className="progress">
-      <progress max={numberQuestions} value={index + Number(answer !== null)} />
+      <progress
+        max={questions.length}
+        value={index + Number(answer !== null)}
+      />
       <p>
-        Question <strong>{index}</strong> / {numberQuestions}
+        Question <strong>{index}</strong> / {questions.length}
       </p>
       <p>
-        <strong>{currentPoint}</strong> / {maxpossiblePoints}
+        <strong>{points}</strong> / {maxTotalPoint}
       </p>
     </header>
   );

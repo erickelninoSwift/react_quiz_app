@@ -1,9 +1,7 @@
 import React from "react";
 import { Options } from "./Options";
-import { useQuizContext } from "../Context/QuizContext";
-export const Question = () => {
-  const { questions, index, answer, dispatch } = useQuizContext();
-  const { question, options, correctOption } = questions[index];
+export const Question = ({ allQuestion, dispatch, answer, myPoints }) => {
+  const { question, options, correctOption } = allQuestion;
 
   return (
     <div>

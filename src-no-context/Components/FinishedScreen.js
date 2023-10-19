@@ -1,14 +1,7 @@
 import React from "react";
-import { useQuizContext } from "../Context/QuizContext";
 
-export const FinishedScreen = () => {
-  const { questions, hightScore, points, dispatch } = useQuizContext();
-
-  const maxTotalPoint = questions.reduce((accumulator, currentValue) => {
-    return accumulator + currentValue.points;
-  }, 0);
-
-  const percentage = (points / maxTotalPoint) * 100;
+export const FinishedScreen = ({ points, maxPoints, dispatch, hightScore }) => {
+  const percentage = (points / maxPoints) * 100;
   const empoji = percentage > 50 ? "🫶 ✅ 💪" : "😔 😥 😭 ";
   return (
     <>
@@ -16,7 +9,7 @@ export const FinishedScreen = () => {
         className="result"
         style={{ width: "500px", padding: "15px", fontSize: "16px" }}
       >
-        {empoji} You scored <strong>{points}</strong> out of {maxTotalPoint}(
+        {empoji} You scored <strong>{points}</strong> out of {maxPoints}(
         {Math.ceil(percentage)})%
       </p>
       <p className="highscore">( Highscore : {hightScore} points)</p>
